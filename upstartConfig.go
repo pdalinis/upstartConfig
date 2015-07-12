@@ -1,4 +1,8 @@
 // The upstartConfig package creates an upstart configuration file for the executing program.
+//
+// For many services written in Go, there is almost no system configuration needed beyond setting up your program to restart if it crashes or the machine reboots.
+//
+// Using this package, you can integrate that configuration step, removing the need for system configuration tools, or a more complex startup script.
 package upstartConfig
 
 import (
@@ -14,6 +18,7 @@ var DestinationPath string = "/etc/init"
 //Permisions for the upstart configuration file
 var Perms string = "0666"
 
+//Upstart configuration
 type Config struct {
 	ServiceName   string
 	ServicePath   string
@@ -63,7 +68,7 @@ func Generate(options ...func(*Config)) (string, *Config) {
 		Script:        fmt.Sprintf("cd %s; exec ./%s", path, name),
 	}
 
-	//populate options into config
+	//populate options into config, overriding defaults
 	for _, o := range options {
 		o(config)
 	}
